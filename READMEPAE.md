@@ -18,3 +18,9 @@ não fazer a 'movimentação' de digitar. É só vc colocar uma senha sua, e dep
 - Eu acho que o erro tbm está no renderer, ele está pedindo o password no prompt, o ideal é aparecer uma telinha pedindo a senha. 
 
 no de mais é isso, a ideia está ai <3
+
+
+
+OBS.: NA PASTA Q VC CLONAR, VC INSTALA O ELECTRON 'npm install --save-dev electron'
+
+PARA RODAR O PROJETO E TESTAR, NO CMD VAI DAR UM 'npm run dev' 
