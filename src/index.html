@@ -1,25 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Conversor de Certificados</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Conversor de Certificados PFX e CRT</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Conversor de Certificados</h2>
-        <input type="file" id="fileInput" multiple>
-        <div class="conversion-options">
-            <input type="radio" id="pfxToCrtKey" name="conversionType" value="pfxToCrtKey" checked>
-            <label for="pfxToCrtKey">PFX para CRT e KEY</label>
-
-            <input type="radio" id="crtKeyToPfx" name="conversionType" value="crtKeyToPfx">
-            <label for="crtKeyToPfx">CRT e KEY para PFX</label>
+  <div class="app-container">
+    <header>
+      <h1>SECURE KEYGEN</h1>
+      <h2>Conversor de certificados PFX E CRT</h2>
+    </header>
+    <main>
+      <div class="file-drop-container" id="file-drop">
+        <div class="file-input-container">
+          <input type="file" id="fileInput" hidden multiple>
+          <button id="fileSelect">Inserir Documentos</button>
         </div>
-        <button id="convertButton">Converter</button>
-    </div>
-    <script src="renderer.js"></script>
+        <p>Arraste o arquivo aqui ou clique no botão acima.</p>
+        <p class="file-types">*Arquivos aceitos: .crt + .key</p>
+      </div>
+      <button id="convertButton">Converter Arquivos</button>
+    </main>
+  </div>
+  <script src="renderer.js"></script>
 </body>
 </html>

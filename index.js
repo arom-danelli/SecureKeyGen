@@ -8,7 +8,9 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
+      contextIsolation: false,
+      preload: path.join(__dirname, 'preload.js')
     },
   });
 
@@ -29,9 +31,7 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.handle(
-  "convert-cert",
-  async (event, { filePath, password, outputPath }) => {
+ipcMain.handle('convert-cert', async (event, { filePath, password, outputPath }) => {
     const baseName = path.basename(filePath, ".pfx");
     const certOutPath = path.join(outputPath, `${baseName}.crt`);
     const keyOutPath = path.join(outputPath, `${baseName}.key`);
@@ -60,6 +60,10 @@ ipcMain.handle(
     }
   }
 );
+
+ipcMain.handle('ask-password', async () => {
+  // Pode ser implementado com dialog.showMessageBox ou sua própria janela customizada
+});
 
 function execPromise(command) {
   return new Promise((resolve, reject) => {
