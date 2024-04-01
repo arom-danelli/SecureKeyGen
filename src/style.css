@@ -8,6 +8,10 @@
   background-color: #D9D9D9;
   border-radius: 20px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   
 }
 
@@ -16,19 +20,21 @@
 }
 
 .file-drop-container button {
-  background-color: #007bff;
+  background-color: #5C2C72;
   color: #fff;
   border: none;
   padding: 10px 20px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
 .file-drop-container button:hover {
-  background-color: #0056b3;
+  background-color: #4e00b3;
 }
 
 .file-types {
   margin-top: 10px;
+  color: #a3a2a2;
 }
 
 #fileList {
@@ -40,14 +46,13 @@
 }
 
 .box {
-  background-image: repeating-linear-gradient(205deg, #460075, #460075 30px, transparent 30px, transparent 60px, #460075 60px), repeating-linear-gradient(295deg, #460075, #460075 30px, transparent 30px, transparent 60px, #460075 60px), repeating-linear-gradient(25deg, #460075, #460075 30px, transparent 30px, transparent 60px, #460075 60px), repeating-linear-gradient(115deg, #460075, #460075 30px, transparent 30px, transparent 60px, #460075 60px);
-  background-size: 3px calc(100% + 66.2px), calc(100% + 66.2px) 3px, 3px calc(100% + 66.2px) , calc(100% + 66.2px) 3px;
-  background-position: 0 0, 0 0, 100% 0, 0 100%;
-  background-repeat: no-repeat;
-  animation: borderAnimation 1s infinite linear reverse;
-  }
-  
-  @keyframes borderAnimation {
-  from { background-position: 0 0, -66.2px 0, 100% -66.2px, 0 100%; }
-  to { background-position: 0 -66.2px, 0 0, 100% 0, -66.2px 100%; }
-  }
+  width: 579px;
+  height: 260px;
+  border-radius: 13px;
+  background-color: #EEEEEE;
+  border: 3px dashed #5C2C72;
+}
+
+.convertButton{
+  color: #5C2C72;
+}

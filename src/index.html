@@ -15,19 +15,19 @@
     </header>
     <main>
       <div class="file-drop-container box" id="file-drop">
-        <div class="file-input-container">
-          <input type="file" id="fileInput" hidden multiple>
-          <button id="fileSelect" onclick="document.getElementById('fileInput').click(); return false;">Inserir Arquivos</button>
-        </div>
+      
+        <p>Arraste os arquivos e solte-os aqui!</p>
         <p>ou</p>
-        <p>Arraste os arquivos e solte-os aqui</p>
-        <div class="container text-center">
+             <div class="container text-center">
           <!-- Espaço para exibir os arquivos selecionados -->
           <div id="fileList"></div>
         </div>
-        <p class="file-types">Arquivos aceitos: .CRT + .KEY</p>
+        <div class="file-input-container">
+          <input type="file" id="fileInput" hidden multiple>
+          <button id="fileSelect" onclick="document.getElementById('fileInput').click(); return false;">Inserir Documentos</button>
+        </div>
+        <p class="file-types">*Arquivos aceitos: .CRT + .KEY</p>
       </div>
-      <button id="convertButton">Converter</button>
     </main>
   </div>
   <script src="renderer.js"></script>
