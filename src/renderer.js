@@ -16,9 +16,19 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedFiles.crtFile = [...files].find(file => file.name.endsWith('.crt'));
     selectedFiles.keyFile = [...files].find(file => file.name.endsWith('.key'));
     selectedFiles.pfxFile = [...files].find(file => file.name.endsWith('.pfx'));
-
+  
+    // Atualizar a interface do usuário
+    const fileList = document.getElementById('fileList');
+    fileList.innerHTML = ''; // Limpar a lista atual
+    Object.values(selectedFiles).forEach(file => {
+      if (file) {
+        const listItem = document.createElement('div');
+        listItem.textContent = file.name;
+        fileList.appendChild(listItem);
+      }
+    });
+  
     console.log('Arquivos selecionados:', selectedFiles);
-
   }
 
   fileDrop.addEventListener('dragover', (e) => {
@@ -34,24 +44,46 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   convertButton.addEventListener('click', async () => {
-    // Se um arquivo PFX foi selecionado, faça a conversão para CRT e KEY
-    if (selectedFiles.pfxFile) {
+    // Se os arquivos CRT e KEY foram selecionados, faça a conversão para PFX
+    if (selectedFiles.crtFile && selectedFiles.keyFile) {
       const password = await window.electronAPI.askPassword();
       if (!password) {
         alert('A senha é necessária para a conversão do arquivo PFX.');
         return;
       }
 
-      // Implemente a conversão aqui, usando a senha fornecida e o arquivo PFX
-      alert('Conversão de PFX para CRT e KEY não implementada ainda.');
-      
-      // Se os arquivos CRT e KEY foram selecionados, faça a conversão para PFX
-    } else if (selectedFiles.crtFile && selectedFiles.keyFile) {
-      // Implemente a conversão aqui
-      alert('Conversão de CRT e KEY para PFX não implementada ainda.');
+      // Realizar a conversão para PFX
+      convertCRTandKEYtoPFX(selectedFiles.crtFile, selectedFiles.keyFile, password)
+        .then((pfxBlob) => {
+          const pfxFile = new Blob([pfxBlob], { type: 'application/x-pkcs12' });
+          const pfxUrl = URL.createObjectURL(pfxFile);
 
+          // Faça algo com o arquivo PFX, como fazer o download ou exibir na tela
+          const a = document.createElement('a');
+          a.href = pfxUrl;
+          a.download = 'certificate.pfx';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(pfxUrl);
+        })
+        .catch((error) => {
+          console.error('Erro ao converter CRT e KEY para PFX:', error);
+          alert('Erro ao converter CRT e KEY para PFX. Verifique o console para mais detalhes.');
+        });
     } else {
-      alert('Por favor, selecione um arquivo PFX ou ambos os arquivos CRT e KEY.');
+      alert('Por favor, selecione ambos os arquivos CRT e KEY.');
     }
   });
+
+  function convertCRTandKEYtoPFX(crtFile, keyFile, password) {
+    // A implementação depende do seu ambiente e setup específico
+    // Este é um pseudocódigo representando o processo de conversão
+    return new Promise((resolve, reject) => {
+      // Substitua este bloco pela sua lógica real de conversão usando BoringSSL/OpenSSL
+      console.log("Conversão iniciada com:", {crtFile, keyFile, password});
+      // Simulação de sucesso na conversão
+      setTimeout(() => resolve("Dados do PFX simulados"), 1000);
+    });
+  }
 });

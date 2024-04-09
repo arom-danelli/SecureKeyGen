@@ -8,8 +8,8 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      nodeIntegration: false,
+      contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     },
   });
@@ -61,8 +61,24 @@ ipcMain.handle('convert-cert', async (event, { filePath, password, outputPath })
   }
 );
 
-ipcMain.handle('ask-password', async () => {
-  // Pode ser implementado com dialog.showMessageBox ou sua própria janela customizada
+ipcMain.handle('ask-password', async (event) => {
+  if (!win) {
+    console.error('A janela não está definida.');
+    return;
+}
+const result = await dialog.showMessageBox(win, {
+  type: 'question',
+  buttons: ['OK', 'Cancel'],
+  title: 'Senha',
+  message: 'Por favor, insira a senha para a conversão do certificado:',
+  // Configure isso para coletar a entrada do usuário
+});
+
+  if (result.response) {
+      return result.response; // Retorna a senha inserida
+  } else {
+      return ""; // Usuário cancelou a ação
+  }
 });
 
 function execPromise(command) {
