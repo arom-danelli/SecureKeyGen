@@ -2,15 +2,20 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const { exec } = require("child_process");
 const fs = require("fs");
 const path = require("path");
+const { convertPFXtoCRTandKEY } = require("./src/converter");
+
+let resolvePasswordPromise;
+let passwordWindow;
+let win;
 
 function createWindow() {
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
@@ -31,64 +36,52 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.handle('convert-cert', async (event, { filePath, password, outputPath }) => {
-    const baseName = path.basename(filePath, ".pfx");
-    const certOutPath = path.join(outputPath, `${baseName}.crt`);
-    const keyOutPath = path.join(outputPath, `${baseName}.key`);
+// Mantenha as funções ipcMain.handle e createPasswordWindow como estão
 
-    const certCommand = `openssl pkcs12 -in "${filePath}" -clcerts -nokeys -out "${certOutPath}" -passin pass:${password}`;
-    const keyCommand = `openssl pkcs12 -in "${filePath}" -nocerts -out "${keyOutPath}" -nodes -passin pass:${password}`;
 
-    try {
-      await execPromise(certCommand);
-      console.log(`Certificado CRT salvo em: ${certOutPath}`);
+// Parte de criação da janela de senha em index.js
+function createPasswordWindow() {
+  passwordWindow = new BrowserWindow({
+    width: 300,
+    height: 200,
+    modal: true,
+    parent: win,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
+  });
 
-      await execPromise(keyCommand);
-      console.log(`Chave privada KEY salva em: ${keyOutPath}`);
-
-      dialog.showMessageBox({
-        type: "info",
-        title: "Conversão Concluída",
-        message: `A conversão foi concluída com sucesso.\nCertificado: ${certOutPath}\nChave Privada: ${keyOutPath}`,
-      });
-    } catch (error) {
-      console.error(`Erro ao converter certificado: ${error}`);
-      dialog.showErrorBox(
-        "Erro na Conversão",
-        "Não foi possível converter o certificado. Verifique o console para mais detalhes."
-      );
-    }
-  }
-);
-
-ipcMain.handle('ask-password', async (event) => {
-  if (!win) {
-    console.error('A janela não está definida.');
-    return;
-}
-const result = await dialog.showMessageBox(win, {
-  type: 'question',
-  buttons: ['OK', 'Cancel'],
-  title: 'Senha',
-  message: 'Por favor, insira a senha para a conversão do certificado:',
-  // Configure isso para coletar a entrada do usuário
-});
-
-  if (result.response) {
-      return result.response; // Retorna a senha inserida
-  } else {
-      return ""; // Usuário cancelou a ação
-  }
-});
-
-function execPromise(command) {
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      resolve(stdout ? stdout : stderr);
-    });
+  passwordWindow.loadFile("src/password.html");
+  passwordWindow.on('closed', () => {
+    passwordWindow = null;
   });
 }
+
+ipcMain.on("password-submitted", (event, password) => {
+  if (passwordWindow) {
+    passwordWindow.close();
+    passwordWindow = null;
+  }
+  if (resolvePasswordPromise) {
+    resolvePasswordPromise(password);
+  }
+});
+
+
+ipcMain.handle("ask-password", async (event) => {
+  createPasswordWindow();
+  return new Promise((resolve) => {
+    resolvePasswordPromise = resolve; // Armazenar a função resolve para uso posterior
+  });
+});
+
+ipcMain.handle('convert-cert', async (event, { type, data }) => {
+  if(type === "PFXtoCRTandKEY") {
+    const { filePath, password } = data;
+    console.log(filePath); // Adicione um log para verificar se o caminho está correto
+    return convertPFXtoCRTandKEY(filePath, password);
+  }
+});
+
