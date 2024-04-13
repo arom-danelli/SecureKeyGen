@@ -2,6 +2,12 @@ const { exec } = require("child_process");
 const path = require("path");
 const os = require("os");
 
+/**
+ * Converte um arquivo PFX para arquivos CRT e KEY usando OpenSSL.
+ * @param {string} pfxPath - Caminho do arquivo PFX.
+ * @param {string} password - Senha do arquivo PFX.
+ * @returns {Promise<Object>} Uma promessa que resolve com os caminhos dos arquivos CRT e KEY.
+ */
 function convertPFXtoCRTandKEY(pfxPath, password) {
   return new Promise((resolve, reject) => {
     const desktopDir = path.join(os.homedir(), "Desktop");

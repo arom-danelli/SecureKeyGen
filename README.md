@@ -1,26 +1,34 @@
-EAI PAIZÃO, SUAVE? 
+# Conversor de Certificados PFX e CRT
 
-Aqui tem algumas observações pra te ajudar no seu role de descobertas.
+## Descrição Geral
 
--O Electron vc instala ele usando o npm ou yarn no cmd mesmo. Na vibe de Angular, Ionic.
+Este projeto consiste em uma aplicação desenvolvida para converter certificados digitais entre os formatos PFX e CRT, permitindo a manipulação segura de certificados para diversos usos, incluindo autenticação e assinatura digital. A aplicação é desenvolvida em Node.js e utiliza tecnologias de criptografia avançada através das bibliotecas `node-forge` e OpenSSL.
 
--Vc precisa instalar o OpenSSl. Tem diversas maneiras, eu baixei um exec num lugar doido ai e instalei. 
+## Tecnologias Utilizadas
 
--É preciso gerar uma chave PFX sua, para fazer os testes no sisteminha. No google ou no gptzão vc encontra como gerar, pelo cmd mesmo. 
+- **Node.js**: Plataforma de execução para JavaScript no lado do servidor.
+- **Electron**: Framework que permite o desenvolvimento de aplicações GUI nativas multiplataforma usando tecnologias web como JavaScript, HTML e CSS.
+- **node-forge**: Biblioteca JavaScript que implementa os padrões de criptografia para modernas aplicações web.
+- **OpenSSL**: Utilizado na branch `withOpenSSL` para proporcionar uma opção de criptografia baseada em linha de comando e compatibilidade com sistemas que já utilizam OpenSSL.
 
--Quando for criar o certificado PFX, na última etapa, vai ter que colocar uma senha. No cmd, quando vc digita a senha, da a impressão que não está digitando. MAs é um padrão do ssl de
-não fazer a 'movimentação' de digitar. É só vc colocar uma senha sua, e depois confirmar ela, voilá! 
+## Funcionalidades
 
--Por enquanto, o sistema está fazendo uma conversão de PFX para CRT + KEY. Porém, eu implementei um arquivo chamado preload.js e depois nada mais funcionou. 
+- **Conversão de PFX para CRT e KEY**: Extrai certificados e chaves privadas de arquivos PFX e os salva em formatos separados de CRT e KEY.
+- **Conversão de CRT e KEY para PFX**: Combina arquivos de certificado CRT e chave privada KEY em um único arquivo PFX.
 
-- O renderer.js está trabalhando em conjunto com o index.js. O renderes está chamando o 'password', lembra que vc define uma senha no PFX? Essa senha precisa fazer parte do processo de conversão. O index chama a rendererização da tela e o conversor.
+## Estrutura do Projeto
 
-- Eu acho que o erro tbm está no renderer, ele está pedindo o password no prompt, o ideal é aparecer uma telinha pedindo a senha. 
+- `src/`: Contém os scripts de conversão e os arquivos HTML/CSS/JS para a interface do usuário.
+- `assets/`: Armazena recursos estáticos como imagens e ícones.
+- `index.js`: Ponto de entrada do aplicativo Electron.
 
-no de mais é isso, a ideia está ai <3
+## Branches
 
+### Main
 
+A branch `main` utiliza `node-forge` para todas as operações de criptografia. É ideal para ambientes onde uma solução puramente JavaScript é suficiente e desejada.
 
-OBS.: NA PASTA Q VC CLONAR, VC INSTALA O ELECTRON 'npm install --save-dev electron'
+### withOpenSSL
 
-PARA RODAR O PROJETO E TESTAR, NO CMD VAI DAR UM 'npm run dev' 
+A branch `withOpenSSL` integra o OpenSSL para fornecer funcionalidades adicionais de criptografia, oferecendo uma opção para sistemas que requerem ou preferem o uso do OpenSSL devido à sua robustez e extenso suporte a diferentes algoritmos e funcionalidades de criptografia.
+
