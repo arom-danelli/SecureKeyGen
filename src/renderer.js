@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const removeFileButton = document.getElementById("removeFileButton");
   const convertButton = document.getElementById("convertButton");
 
+
   let currentConversionType = "PFXtoCRTandKEY";
   let selectedFiles = { crtFile: null, keyFile: null, pfxFile: null };
 
@@ -109,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSelectedFilesDisplay();
   }
 
+ 
   async function proceedWithConversion(
     conversionType,
     password,

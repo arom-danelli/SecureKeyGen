@@ -6,4 +6,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   askPassword: () => ipcRenderer.invoke("ask-password"),
   convertCert: (data) => ipcRenderer.invoke("convert-cert", data),
   submitPassword: (password) => ipcRenderer.send('password-submitted', password), 
+
 });

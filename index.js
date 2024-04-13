@@ -1,10 +1,9 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
-const { exec } = require("child_process"); 
+const { exec } = require("child_process");
 const os = require("os");
 const { convertPFXtoCRTandKEY } = require("./src/converterToCrt");
 const { convertCRTandKEYtoPFX } = require("./src/converterToPfx");
-
 
 let resolvePasswordPromise;
 let passwordWindow;
@@ -24,10 +23,9 @@ function createWindow() {
   win.loadFile("src/index.html");
 }
 
-app.on('ready', () => {
-  checkOpenSSL(createWindow); 
+app.on("ready", () => {
+  checkOpenSSL(createWindow);
 });
-
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -53,10 +51,9 @@ function checkOpenSSL(callback) {
   });
 }
 
-
 function installOpenSSL(callback) {
   // Detectar a arquitetura do sistema (32 ou 64 bits)
-  const is64Bit = os.arch() === 'x64';
+  const is64Bit = os.arch() === "x64";
   // Ajustar o caminho para apontar para o local correto onde o instalador está localizado
   const installerPath = path.join(
     app.getAppPath(),
@@ -78,8 +75,8 @@ function installOpenSSL(callback) {
 
 function createPasswordWindow() {
   passwordWindow = new BrowserWindow({
-    width: 300,
-    height: 200,
+    width: 400,
+    height: 300,
     modal: true,
     parent: win,
     webPreferences: {
@@ -87,9 +84,11 @@ function createPasswordWindow() {
       contextIsolation: false,
       enableRemoteModule: true,
     },
+    frame: false, // Adicione isso se você também quiser remover a moldura da janela.
   });
 
   passwordWindow.loadFile("src/password.html");
+  passwordWindow.setMenu(null); // Isso remove o menu da janela de senha
   passwordWindow.on("closed", () => {
     passwordWindow = null;
   });
@@ -117,7 +116,11 @@ ipcMain.handle("convert-cert", async (event, { type, data }) => {
     if (type === "PFXtoCRTandKEY") {
       return await convertPFXtoCRTandKEY(data.filePath, data.password);
     } else if (type === "CRTandKEYtoPFX") {
-      return await convertCRTandKEYtoPFX(data.crtPath, data.keyPath, data.password);
+      return await convertCRTandKEYtoPFX(
+        data.crtPath,
+        data.keyPath,
+        data.password
+      );
     }
   } catch (error) {
     console.error("Erro na conversão:", error);
