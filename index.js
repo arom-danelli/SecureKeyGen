@@ -1,8 +1,10 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const { exec } = require("child_process");
-const fs = require("fs");
 const path = require("path");
-const { convertPFXtoCRTandKEY } = require("./src/converter");
+const { exec } = require("child_process"); 
+const os = require("os");
+const { convertPFXtoCRTandKEY } = require("./src/converterToCrt");
+const { convertCRTandKEYtoPFX } = require("./src/converterToPfx");
+
 
 let resolvePasswordPromise;
 let passwordWindow;
@@ -22,7 +24,10 @@ function createWindow() {
   win.loadFile("src/index.html");
 }
 
-app.whenReady().then(createWindow);
+app.on('ready', () => {
+  checkOpenSSL(createWindow); 
+});
+
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -36,10 +41,41 @@ app.on("activate", () => {
   }
 });
 
-// Mantenha as funções ipcMain.handle e createPasswordWindow como estão
+function checkOpenSSL(callback) {
+  exec("openssl version", (error) => {
+    if (error) {
+      console.log("OpenSSL não está instalado. Instalando...");
+      installOpenSSL(callback);
+    } else {
+      console.log("OpenSSL já está instalado.");
+      callback();
+    }
+  });
+}
 
 
-// Parte de criação da janela de senha em index.js
+function installOpenSSL(callback) {
+  // Detectar a arquitetura do sistema (32 ou 64 bits)
+  const is64Bit = os.arch() === 'x64';
+  // Ajustar o caminho para apontar para o local correto onde o instalador está localizado
+  const installerPath = path.join(
+    app.getAppPath(),
+    "src",
+    "assets",
+    "OpenSSL",
+    is64Bit ? "Win64OpenSSL_Light-3_3_0.exe" : "Win32OpenSSL_Light-3_3_0.exe"
+  );
+
+  exec(`"${installerPath}" /silent /verysilent /sp-`, (error) => {
+    if (error) {
+      console.error("Falha ao instalar OpenSSL:", error);
+    } else {
+      console.log("OpenSSL instalado com sucesso");
+      callback();
+    }
+  });
+}
+
 function createPasswordWindow() {
   passwordWindow = new BrowserWindow({
     width: 300,
@@ -54,7 +90,7 @@ function createPasswordWindow() {
   });
 
   passwordWindow.loadFile("src/password.html");
-  passwordWindow.on('closed', () => {
+  passwordWindow.on("closed", () => {
     passwordWindow = null;
   });
 }
@@ -69,19 +105,22 @@ ipcMain.on("password-submitted", (event, password) => {
   }
 });
 
-
 ipcMain.handle("ask-password", async (event) => {
   createPasswordWindow();
   return new Promise((resolve) => {
-    resolvePasswordPromise = resolve; // Armazenar a função resolve para uso posterior
+    resolvePasswordPromise = resolve;
   });
 });
 
-ipcMain.handle('convert-cert', async (event, { type, data }) => {
-  if(type === "PFXtoCRTandKEY") {
-    const { filePath, password } = data;
-    console.log(filePath); // Adicione um log para verificar se o caminho está correto
-    return convertPFXtoCRTandKEY(filePath, password);
+ipcMain.handle("convert-cert", async (event, { type, data }) => {
+  try {
+    if (type === "PFXtoCRTandKEY") {
+      return await convertPFXtoCRTandKEY(data.filePath, data.password);
+    } else if (type === "CRTandKEYtoPFX") {
+      return await convertCRTandKEYtoPFX(data.crtPath, data.keyPath, data.password);
+    }
+  } catch (error) {
+    console.error("Erro na conversão:", error);
+    throw new Error(error);
   }
 });
-
