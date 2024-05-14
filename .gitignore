@@ -30,7 +30,6 @@ out/
 Thumbs.db
 
 # Compiled JavaScript files
-*.js
 *.jsx
 *.ts
 *.tsx
