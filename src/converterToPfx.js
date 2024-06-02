@@ -1,15 +1,15 @@
 const forge = require('node-forge');
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 
 /**
  * Função para converter arquivos CRT e KEY em um arquivo PFX.
  * @param {string} crtPath - Caminho para o arquivo CRT.
  * @param {string} keyPath - Caminho para o arquivo KEY.
  * @param {string} password - Senha para encriptar o arquivo PFX.
+ * @param {string} saveDirectory - Diretório para salvar os arquivos convertidos.
  */
-function convertCRTandKEYtoPFX(crtPath, keyPath, password) {
+function convertCRTandKEYtoPFX(crtPath, keyPath, password, saveDirectory) {
   const crtPem = fs.readFileSync(crtPath, 'utf8');
   const keyPem = fs.readFileSync(keyPath, 'utf8');
 
@@ -21,9 +21,8 @@ function convertCRTandKEYtoPFX(crtPath, keyPath, password) {
   const pfxDer = forge.asn1.toDer(pfxAsn1).getBytes();
   const pfxBuffer = Buffer.from(pfxDer, 'binary');
 
-  const desktopDir = path.join(os.homedir(), 'Desktop');
   const baseName = path.basename(crtPath, ".crt");
-  const pfxOutPath = path.join(desktopDir, `${baseName}.pfx`);
+  const pfxOutPath = path.join(saveDirectory, `${baseName}.pfx`);
 
   fs.writeFileSync(pfxOutPath, pfxBuffer);
 

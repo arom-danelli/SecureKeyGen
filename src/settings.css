@@ -1,0 +1,94 @@
+.app-container {
+  max-width: 700px;
+  height: 510px;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  -webkit-app-region: drag; /* Permitir arrastar a janela */
+}
+
+.window-controls {
+  display: flex;
+  gap: 10px;
+  -webkit-app-region: no-drag; /* Botões não são arrastáveis */
+}
+
+.window-controls button {
+  background: none;
+  border: none;
+  color: #4a148c;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-text {
+  flex-grow: 1;
+  margin-left: 15px;
+}
+
+.header-text h1 {
+  font-size: 1.5em;
+  margin: 0;
+  color: #4a148c;
+}
+
+
+
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.settings-content {
+  display: flex;
+  height: 100%;
+}
+
+.settings-text, .settings-options {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.settings-text {
+  border-right: 1px solid #ddd;
+}
+
+.settings-text h2 {
+  font-size: 1.3em;
+  margin: 0;
+  color: #4a148c;
+}
+
+.settings-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+}
+
+.settings-options button {
+  margin-bottom: 20px;
+  background-color: #4a148c;
+  color: #ffffff;
+}

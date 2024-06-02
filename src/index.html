@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://cdn.jsdelivr.net;">
   <meta charset="UTF-8" />
   <title>Conversor de Certificados PFX e CRT</title>
   <link rel="stylesheet" type="text/css" href="style.css" />
@@ -9,31 +8,41 @@
 </head>
 <body>
   <div class="app-container">
-    <header>
+    <header class="draggable">
       <div class="header-content">
-        <img src="./assets/icons/shield_lock.svg" alt="Secure Keygen" width="50" height="50" />
-        <h1>SECURE KEYGEN</h1>
-        <h2>Conversor de certificados PFX e CRT</h2>
+        <img src="./assets/icons/shield_lock.svg" alt="Secure Keygen" class="header-icon" />
+        <div class="header-text">
+          <h1>SECURE KEYGEN</h1>
+          <h2>Conversor de certificados PFX e CRT</h2>
+        </div>
+        <div class="window-controls">
+          <img src="./assets/icons/settings.svg" alt="Settings" id="settings-icon" class="settings-icon">
+          <span class="divider">|</span>
+          <button id="minimize-button">_</button>
+          <button id="maximize-button">□</button>
+          <button id="close-button">X</button>
+        </div>
       </div>
     </header>
     <main>
-      <div class="conversion-type-tabs">
-        <button id="toPFXButton" class="btn btn-primary">PFX</button>
-        <button id="toCRTButton" class="btn btn-secondary">CRT</button>
-      </div>
       <div class="main-content">
+        <div class="conversion-type-tabs">
+          <button id="toPFXButton" class="btn btn-primary active">PFX</button>
+          <button id="toCRTButton" class="btn btn-secondary">CRT</button>
+        </div>
         <div class="file-drop-container box" id="file-drop">
+          <p id="conversion-type-text">Converter para PFX</p>
           <p>Arraste o arquivo aqui!</p>
           <p>ou</p>
           <button id="fileSelect" class="btn btn-primary">Inserir Documentos</button>
           <input type="file" id="fileInput" hidden multiple />
-          <p class="file-types">*Arquivos aceitos: <span id="accepted-file-types">.crt + .key</span></p>
+          <p class="file-types" id="file-types-text">É necessário adicionar DOIS arquivos: .CRT + .KEY</p>
         </div>
         <div id="fileListContainer" class="file-list-container">
           <div id="fileList" class="file-list"></div>
-          <button id="convertButton" class="btn btn-primary">Converter Arquivos</button>
+          <div id="feedbackMessage" class="feedback-message"></div>
+          <button id="convertButton" class="btn btn-primary center-button">Converter Arquivos</button>
         </div>
-        <div id="feedbackMessage" class="feedback-message"></div>
       </div>
     </main>
   </div>

@@ -4,61 +4,64 @@ document.addEventListener("DOMContentLoaded", () => {
   const fileDrop = document.getElementById("file-drop");
   const toPFXButton = document.getElementById("toPFXButton");
   const toCRTButton = document.getElementById("toCRTButton");
-  const fileTypesText = document.getElementById("accepted-file-types");
   const fileListElement = document.getElementById("fileList");
   const fileListContainer = document.getElementById("fileListContainer");
   const convertButton = document.getElementById("convertButton");
   const feedbackMessage = document.getElementById("feedbackMessage");
+  const conversionTypeText = document.getElementById("conversion-type-text");
+  const fileTypesText = document.getElementById("file-types-text");
 
   let currentConversionType = "PFXtoCRTandKEY";
   let selectedFiles = { crtFile: null, keyFile: null, pfxFile: null };
 
+  toPFXButton.classList.add('active'); // Inicia com PFX ativo
+
   function createFileListItem(file, isValid, shouldAnimate = true, initialProgress = 0) {
     const fileItem = document.createElement("div");
     fileItem.className = "file-list-item";
-  
+
     const fileIcon = document.createElement("img");
     fileIcon.src = "./assets/icons/file_icon.svg"; // Caminho para o ícone SVG
     fileIcon.className = "file-icon";
-  
+
     const fileName = document.createElement("span");
     fileName.className = "file-name";
     fileName.textContent = file.name;
     fileName.setAttribute("data-fullname", file.name); // Adiciona o nome completo como atributo de dados
-  
+
     const progressContainer = document.createElement("div");
     progressContainer.className = "progress-container";
-    
+
     const progressBar = document.createElement("div");
     progressBar.className = "progress-bar";
     progressBar.style.width = `${initialProgress}%`;
-    
+
     progressContainer.appendChild(progressBar);
-  
+
     const progressText = document.createElement("span");
     progressText.className = "progress-text";
     progressText.textContent = `${initialProgress}%`;
-  
+
     const removeButton = document.createElement("button");
     removeButton.className = "remove-button";
     removeButton.innerHTML = "&times;";
     removeButton.addEventListener("click", () => {
       removeFile(file);
     });
-  
+
     fileItem.appendChild(fileIcon);
     fileItem.appendChild(fileName);
     fileItem.appendChild(progressContainer);
     fileItem.appendChild(progressText);
     fileItem.appendChild(removeButton);
-  
+
     if (!isValid) {
       const invalidText = document.createElement("span");
       invalidText.textContent = "INVÁLIDO";
       invalidText.style.color = "#f44336";
       fileItem.appendChild(invalidText);
     }
-  
+
     if (shouldAnimate) {
       setTimeout(() => {
         let progressValue = initialProgress;
@@ -80,16 +83,12 @@ document.addEventListener("DOMContentLoaded", () => {
       progressText.classList.add("ok");
       fileItem.classList.add("loaded");
     }
-  
+
     return fileItem;
   }
-  
-  
+
   function removeFile(file) {
-    if (
-      currentConversionType === "PFXtoCRTandKEY" &&
-      selectedFiles.pfxFile === file
-    ) {
+    if (currentConversionType === "PFXtoCRTandKEY" && selectedFiles.pfxFile === file) {
       selectedFiles.pfxFile = null;
     } else if (currentConversionType === "CRTandKEYtoPFX") {
       if (selectedFiles.crtFile === file) {
@@ -98,16 +97,16 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedFiles.keyFile = null;
       }
     }
-    updateSelectedFilesDisplay();
+    updateSelectedFilesDisplay([]);
     fileInput.value = ""; // Reseta o input de arquivos para permitir adicionar novamente
   }
 
-  function updateSelectedFilesDisplay(newFile) {
+  function updateSelectedFilesDisplay(newFiles) {
     fileListElement.innerHTML = "";
     Object.values(selectedFiles).forEach((file) => {
       if (file) {
         const isValid = currentConversionType === "PFXtoCRTandKEY" ? file.name.endsWith(".pfx") : file.name.endsWith(".crt") || file.name.endsWith(".key");
-        const shouldAnimate = file === newFile;
+        const shouldAnimate = newFiles.includes(file);
         const initialProgress = shouldAnimate ? 0 : 100; // Mantém o progresso se não for novo
         const fileItem = createFileListItem(file, isValid, shouldAnimate, initialProgress);
         fileListElement.appendChild(fileItem);
@@ -117,30 +116,25 @@ document.addEventListener("DOMContentLoaded", () => {
     fileListContainer.classList.toggle("show", hasFiles);
     convertButton.style.display = hasFiles ? 'block' : 'none';
   }
-  
-  
 
   function handleFilesChange() {
     const files = Array.from(fileInput.files);
-    let newFile = null;
+    let newFiles = [];
     files.forEach((file) => {
-      if (
-        currentConversionType === "PFXtoCRTandKEY" &&
-        file.name.endsWith(".pfx")
-      ) {
+      if (currentConversionType === "PFXtoCRTandKEY" && file.name.endsWith(".pfx")) {
         selectedFiles.pfxFile = file;
-        newFile = file;
+        newFiles.push(file);
       } else if (currentConversionType === "CRTandKEYtoPFX") {
         if (file.name.endsWith(".crt")) {
           selectedFiles.crtFile = file;
-          newFile = file;
+          newFiles.push(file);
         } else if (file.name.endsWith(".key")) {
           selectedFiles.keyFile = file;
-          newFile = file;
+          newFiles.push(file);
         }
       }
     });
-    updateSelectedFilesDisplay(newFile);
+    updateSelectedFilesDisplay(newFiles);
   }
 
   fileSelect.addEventListener("click", () => {
@@ -163,20 +157,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   toPFXButton.addEventListener("click", () => {
     currentConversionType = "CRTandKEYtoPFX";
-    fileTypesText.textContent = ".crt + .key";
+    conversionTypeText.textContent = "Converter para PFX";
+    fileTypesText.textContent = "É necessário adicionar um arquivo .crt e outro .key";
     fileInput.accept = ".crt,.key";
+    toPFXButton.classList.add('active');
+    toCRTButton.classList.remove('active');
     selectedFiles = { crtFile: null, keyFile: null, pfxFile: null }; // Limpar seleção de arquivos ao mudar o tipo de conversão
-    updateSelectedFilesDisplay();
+    updateSelectedFilesDisplay([]);
   });
-  
+
   toCRTButton.addEventListener("click", () => {
     currentConversionType = "PFXtoCRTandKEY";
-    fileTypesText.textContent = ".pfx";
+    conversionTypeText.textContent = "Converter para CRT";
+    fileTypesText.textContent = "É necessário adicionar um arquivo .pfx";
     fileInput.accept = ".pfx";
+    toCRTButton.classList.add('active');
+    toPFXButton.classList.remove('active');
     selectedFiles = { crtFile: null, keyFile: null, pfxFile: null }; // Limpar seleção de arquivos ao mudar o tipo de conversão
-    updateSelectedFilesDisplay();
+    updateSelectedFilesDisplay([]);
   });
-  
+
   convertButton.addEventListener("click", async () => {
     let canProceed =
       currentConversionType === "PFXtoCRTandKEY"
@@ -185,12 +185,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (canProceed) {
       const password = await window.electronAPI.askPassword();
       if (password) {
+        const saveDirectory = localStorage.getItem('saveDirectory') || app.getPath('documents');
         proceedWithConversion(
           currentConversionType,
           password,
           selectedFiles.pfxFile?.path,
           selectedFiles.crtFile?.path,
-          selectedFiles.keyFile?.path
+          selectedFiles.keyFile?.path,
+          saveDirectory
         );
       }
     } else {
@@ -203,13 +205,14 @@ document.addEventListener("DOMContentLoaded", () => {
     password,
     pfxPath,
     crtPath,
-    keyPath
+    keyPath,
+    saveDirectory
   ) {
     try {
       let data =
         conversionType === "CRTandKEYtoPFX"
-          ? { crtPath, keyPath, password }
-          : { filePath: pfxPath, password };
+          ? { crtPath, keyPath, password, saveDirectory }
+          : { filePath: pfxPath, password, saveDirectory };
       const result = await window.electronAPI.convertCert({
         type: conversionType,
         data,
@@ -223,11 +226,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showFeedbackMessage(message, type) {
+    fileListElement.innerHTML = ""; // Limpa a lista de arquivos
     feedbackMessage.textContent = message;
     feedbackMessage.className = "feedback-message " + type;
     feedbackMessage.style.display = "block";
+    fileListContainer.style.height = "150px"; // Define a altura desejada
+    convertButton.style.display = "none";
     setTimeout(() => {
       feedbackMessage.style.display = "none";
-    }, 5000); // Ocultar mensagem após 5 segundos
+      // Restaura o estado inicial
+      selectedFiles = { crtFile: null, keyFile: null, pfxFile: null };
+      fileListContainer.style.height = "auto"; // Restaura a altura original
+      updateSelectedFilesDisplay([]);
+    }, 3000); // Ocultar mensagem após 3 segundos e restaurar estado inicial
   }
+
+  document.getElementById('minimize-button').addEventListener('click', () => {
+    window.electronAPI.minimizeWindow();
+  });
+
+  document.getElementById('close-button').addEventListener('click', () => {
+    window.electronAPI.closeWindow();
+  });
+
+  document.getElementById('settings-icon').addEventListener('click', () => {
+    window.electronAPI.openSettings();
+  });
 });

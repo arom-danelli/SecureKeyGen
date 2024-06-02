@@ -1,40 +1,133 @@
 .app-container {
   max-width: 700px;
-  height: 510px; /* Ajustar a altura para remover a barra de rolagem */
-  overflow: hidden; /* Esconder qualquer overflow */
+  height: 510px;
+  overflow: hidden;
   margin: 0 auto;
   padding: 20px;
-  background-color: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+body {
+  background-image: url('./assets/fundo.jpg'); /* Atualize o nome e a extensão da imagem conforme necessário */
+  background-size: cover; /* Faz com que a imagem cubra toda a área */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Evita que a imagem se repita */
+  background-attachment: fixed; /* Faz com que a imagem fique fixa no lugar enquanto você rola */
+}
+
 header {
-  text-align: center;
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  -webkit-app-region: drag; /* Permitir arrastar a janela */
+}
+
+.window-controls {
+  display: flex;
+  gap: 10px;
+  -webkit-app-region: no-drag; /* Botões não são arrastáveis */
+}
+
+.window-controls button {
+  background: none;
+  border: none;
+  color: #4a148c;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.window-controls button:hover {
+  color: #6a1b9a;
 }
 
 .header-content {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-icon {
+  width: 70px;
+  height: 70px;
+}
+
+.header-text {
+  flex-grow: 1;
+  margin-left: 15px;
+}
+
+.header-text h1 {
+  font-size: 1.5em;
+  margin: 0;
+  color: #4a148c;
+}
+
+.header-text h2 {
+  font-size: 1.2em;
+  margin: 0;
+  color: #6a1b9a;
 }
 
 .conversion-type-tabs {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-right: 0;
+  margin-top: 40px;
 }
 
-.conversion-type-tabs button {
-  margin: 0 5px;
+.conversion-type-tabs button.active {
+  background-color: #5C2C72 !important;
+  color: #ffffff;
+}
+
+.conversion-type-tabs button:not(.active) {
+  background-color: #6c757d !important;
+  color: #ffffff;
+}
+
+#toPFXButton {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px 0 0 0;
+  margin-bottom: 0;
+}
+
+#toPFXButton:hover {
+  background-color: #4e00b3;
+}
+
+#toPFXButton.active {
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#toCRTButton {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  cursor: pointer;
+  border-radius: 0 0 0 20px;
+  margin-top: 0;
+}
+
+#toCRTButton:hover {
+  background-color: #5a6268;
+}
+
+#toCRTButton.active {
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .main-content {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
 .file-drop-container {
@@ -45,7 +138,6 @@ header {
   text-align: center;
   margin-bottom: 20px;
   flex: 1;
-  margin-right: 20px;
 }
 
 .file-drop-container p {
@@ -56,14 +148,10 @@ header {
   color: #888888;
 }
 
-.file-list-container {
-  flex: 1;
-  margin-bottom: 20px;
-  display: none; /* Oculto inicialmente */
-}
+
 
 .file-list-container.show {
-  display: block; /* Exibe quando houver arquivos selecionados */
+  display: block;
 }
 
 .file-list {
@@ -81,20 +169,20 @@ header {
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
-  position: relative; /* Necessário para o efeito de contorno */
+  position: relative;
 }
 
 .file-list-item .progress-container {
   display: flex;
   align-items: center;
   width: 100%;
-  height: 10px; /* Ajustar a espessura da barra de progresso */
+  height: 10px;
   background-color: #dcdcdc;
   border-radius: 5px;
   overflow: hidden;
   position: relative;
-  margin-left: 10px; /* Adiciona espaçamento à esquerda */
-  margin-right: 10px; /* Adiciona espaçamento à direita */
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .file-list-item .progress-bar {
@@ -115,9 +203,9 @@ header {
   overflow: hidden;
   text-overflow: ellipsis;
   position: absolute;
-  top: -2px;  /* Adiciona o nome acima da barra de progresso */
-  left: 50px;  /* Ajusta o alinhamento à esquerda */
-  margin-right: 10px;  /* Espaçamento entre o nome do arquivo e a barra */
+  top: -2px;
+  left: 50px;
+  margin-right: 10px;
   font-size: 13px;
 }
 
@@ -125,18 +213,17 @@ header {
   font-size: 12px;
   color: #333;
   position: absolute;
-  right: 58px;  /* Ajusta o alinhamento à direita para evitar sobreposição com o botão de excluir */
-  top: 25px;  /* Alinha o texto de progresso com o nome do documento */
+  right: 58px;
+  top: 25px;
   z-index: 1;
 }
 
-
 .file-list-item .progress-text.ok {
-  color: #4caf50; /* Cor verde para "OK!" */
+  color: #4caf50;
 }
 
 .file-list-item .progress-text.error {
-  color: #f44336; /* Cor vermelha para "ERRO!" */
+  color: #f44336;
 }
 
 .file-list-item .remove-button {
@@ -146,7 +233,7 @@ header {
   cursor: pointer;
   position: relative;
   z-index: 1;
-  margin-left: 10px; /* Espaçamento entre a barra e o botão de remover */
+  margin-left: 10px;
 }
 
 button.btn-primary {
@@ -168,16 +255,35 @@ button.btn-secondary:hover {
 }
 
 #convertButton {
-  display: none; /* Oculto por padrão */
-  margin-top: 20px; /* Adiciona espaçamento acima do botão */
+  display: none;
+  margin-top: 20px;
+}
+
+.center-button {
+  display: block;
+  margin: 0 auto;
+}
+
+.file-list-container {
+  flex: 1;
+  margin-bottom: 20px;
+  display: none;
+  position: relative;
+  height: 150px; /* Define a altura padrão */
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
 }
 
 .feedback-message {
-  margin-top: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 10px;
   border-radius: 5px;
-  display: none; /* Oculto inicialmente */
+  display: none;
   text-align: center;
+  width: 80%;
 }
 
 .feedback-message.success {
@@ -192,7 +298,12 @@ button.btn-secondary:hover {
   border: 1px solid #f5c6cb;
 }
 
-/* Estilos Responsivos */
+.file-list-container.show {
+  display: block;
+}
+
+
+
 @media (max-width: 600px) {
   .main-content {
     flex-direction: column;
