@@ -1,10 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body {
+  background-image: url('../../assets/fundo.jpg'); /* Atualize o caminho conforme necessário */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  overflow: hidden; /* Remove as barras de rolagem */
+}
+
 .app-container {
   max-width: 700px;
   height: 510px;
   overflow: hidden;
   margin: 0 auto;
   padding: 20px;
-  background-color: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -32,7 +44,9 @@ header {
   cursor: pointer;
 }
 
-
+.window-controls button:hover {
+  color: #6a1b9a;
+}
 
 .header-content {
   display: flex;
@@ -51,8 +65,6 @@ header {
   margin: 0;
   color: #4a148c;
 }
-
-
 
 .settings-container {
   display: flex;
@@ -79,16 +91,49 @@ header {
   font-size: 1.3em;
   margin: 0;
   color: #4a148c;
+  font-family: 'Roboto', sans-serif;
 }
 
 .settings-options {
   display: flex;
   flex-direction: column;
-  justify-content: top;
+  justify-content: flex-start;
+}
+
+.settings-options h3 {
+  font-size: 1.3em;
+  margin: 0;
+  color: #4a148c;
+  font-family: 'Roboto', sans-serif;
 }
 
 .settings-options button {
   margin-bottom: 20px;
   background-color: #4a148c;
   color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif; 
+  transition: background-color 0.3s;
 }
+
+.settings-options button:hover {
+  background-color: #3a116d;
+  color: #ffffff;
+}
+
+.hr-line {
+  border: 0;
+  height: 1px;
+  background: #ddd;
+  margin: 20px 0;
+}
+
+.contacts-title {
+  font-size: 1.1em;
+  margin: 10px 0;
+  color: #4a148c;
+}
+

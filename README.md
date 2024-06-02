@@ -32,3 +32,7 @@ A branch `main` utiliza `node-forge` para todas as operações de criptografia. 
 
 A branch `withOpenSSL` integra o OpenSSL para fornecer funcionalidades adicionais de criptografia, oferecendo uma opção para sistemas que requerem ou preferem o uso do OpenSSL devido à sua robustez e extenso suporte a diferentes algoritmos e funcionalidades de criptografia.
 
+
+npm run dev
+npm run dist:win 
+npm run dist:linux

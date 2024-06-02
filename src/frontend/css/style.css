@@ -10,7 +10,7 @@
 }
 
 body {
-  background-image: url('./assets/fundo.jpg'); /* Atualize o nome e a extensão da imagem conforme necessário */
+  background-image: url('../../assets/fundo.jpg'); /* Atualize o nome e a extensão da imagem conforme necessário */
   background-size: cover; /* Faz com que a imagem cubra toda a área */
   background-position: center; /* Centraliza a imagem */
   background-repeat: no-repeat; /* Evita que a imagem se repita */
@@ -226,6 +226,10 @@ header {
   color: #f44336;
 }
 
+.file-list-item .progress-text.error {
+  color: #f44336; /* Cor vermelha */
+}
+
 .file-list-item .remove-button {
   background-color: transparent;
   border: none;
@@ -252,6 +256,14 @@ button.btn-secondary {
 
 button.btn-secondary:hover {
   background-color: #5a6268;
+}
+
+#conversion-type-text {
+  font-size: 1.5em; /* Aumente o tamanho da fonte */
+  font-weight: bold; /* Deixe o texto mais grosso */
+  color: #4a148c; /* Altere a cor do texto */
+  margin-bottom: 10px; /* Adicione espaço abaixo do texto */
+  text-align: center; /* Centralize o texto */
 }
 
 #convertButton {
@@ -301,6 +313,27 @@ button.btn-secondary:hover {
 .file-list-container.show {
   display: block;
 }
+
+.separator {
+  margin-top: 20px;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1em;
+  color: #4a148c;
+}
+
+.company-logo {
+  width: 130px;
+  height: auto;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
 
 
 

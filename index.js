@@ -1,7 +1,8 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
-const { convertPFXtoCRTandKEY } = require("./src/converterToCrt");
-const { convertCRTandKEYtoPFX } = require("./src/converterToPfx");
+const { convertPFXtoCRTandKEY } = require("./src/backend/converterToCrt");
+const { convertCRTandKEYtoPFX } = require("./src/backend/converterToPfx");
+const { isValidPFX, isValidCRT, isValidKEY } = require("./src/backend/validator");
 
 let win;
 let settingsWindow;
@@ -19,6 +20,7 @@ async function createWindow() {
   win = new BrowserWindow({
     width: 700,
     height: 510,
+    resizable: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -27,7 +29,15 @@ async function createWindow() {
     frame: false
   });
 
-  win.loadFile("src/index.html");
+  win.loadFile("./src/frontend/html/index.html");
+
+  win.on('maximize', () => {
+    win.unmaximize();
+  });
+
+  win.on('will-resize', (event) => {
+    event.preventDefault();
+  });
 
   ipcMain.handle('select-directory', async (event) => {
     const result = await dialog.showOpenDialog(win, {
@@ -42,14 +52,40 @@ async function createWindow() {
   ipcMain.handle("convert-cert", async (event, { type, data }) => {
     try {
       const saveDirectory = store.get('saveDirectory') || app.getPath('documents');
+  
       if (type === "PFXtoCRTandKEY") {
+        if (!isValidPFX(data.filePath, data.password)) {
+          throw new Error("Certificado Inválido");
+        }
         return await convertPFXtoCRTandKEY(data.filePath, data.password, saveDirectory);
       } else if (type === "CRTandKEYtoPFX") {
+        if (!isValidCRT(data.crtPath) || !isValidKEY(data.keyPath)) {
+          throw new Error("Certificado Inválido");
+        }
         return await convertCRTandKEYtoPFX(data.crtPath, data.keyPath, data.password, saveDirectory);
       }
     } catch (error) {
       console.error("Erro na conversão:", error);
-      throw error;
+      throw new Error("Certificado Inválido");
+    }
+  });
+
+  ipcMain.handle("check-file-validity", async (event, { filePath, conversionType, password }) => {
+    try {
+      let isValid = false;
+      if (conversionType === "PFXtoCRTandKEY") {
+        isValid = isValidPFX(filePath, password);
+      } else if (conversionType === "CRTandKEYtoPFX") {
+        if (filePath.endsWith(".crt")) {
+          isValid = isValidCRT(filePath);
+        } else if (filePath.endsWith(".key")) {
+          isValid = isValidKEY(filePath);
+        }
+      }
+      return { isValid };
+    } catch (error) {
+      console.error("Erro na validação do arquivo:", error);
+      return { isValid: false };
     }
   });
 }
@@ -58,6 +94,7 @@ function createSettingsWindow() {
   settingsWindow = new BrowserWindow({
     width: 700,
     height: 510,
+    resizable: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -69,7 +106,16 @@ function createSettingsWindow() {
     frame: false
   });
 
-  settingsWindow.loadFile("src/settings.html");
+  settingsWindow.loadFile("./src/frontend/html/settings.html");
+
+  settingsWindow.on('maximize', () => {
+    settingsWindow.unmaximize();
+  });
+
+  settingsWindow.on('will-resize', (event) => {
+    event.preventDefault();
+  });
+
   settingsWindow.once("ready-to-show", () => {
     settingsWindow.show();
   });
@@ -78,6 +124,57 @@ function createSettingsWindow() {
     settingsWindow = null;
   });
 }
+
+function createPasswordWindow(conversionType) {
+  passwordWindow = new BrowserWindow({
+    width: 400,
+    height: 300,
+    resizable: false,
+    modal: true,
+    parent: win,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
+    frame: false // Remove a barra do Windows
+  });
+
+  passwordWindow.loadFile("./src/frontend/html/password.html");
+  
+  passwordWindow.on('maximize', () => {
+    passwordWindow.unmaximize();
+  });
+
+  passwordWindow.on('will-resize', (event) => {
+    event.preventDefault();
+  });
+
+  passwordWindow.webContents.once("did-finish-load", () => {
+    passwordWindow.webContents.send("set-conversion-type", conversionType);
+  });
+
+  passwordWindow.on("closed", () => {
+    passwordWindow = null;
+  });
+}
+
+ipcMain.handle("ask-password", async (event, conversionType) => {
+  createPasswordWindow(conversionType);
+  return new Promise((resolve) => {
+    resolvePasswordPromise = resolve;
+  });
+});
+
+ipcMain.on("password-submitted", (event, password) => {
+  if (passwordWindow) {
+    passwordWindow.close();
+    passwordWindow = null;
+  }
+  if (resolvePasswordPromise) {
+    resolvePasswordPromise(password);
+  }
+});
 
 app.whenReady().then(createWindow);
 
@@ -99,42 +196,6 @@ ipcMain.on("open-settings", () => {
   } else {
     settingsWindow.show();
   }
-});
-
-function createPasswordWindow() {
-  passwordWindow = new BrowserWindow({
-    width: 300,
-    height: 200,
-    modal: true,
-    parent: win,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    },
-  });
-
-  passwordWindow.loadFile("src/password.html");
-  passwordWindow.on("closed", () => {
-    passwordWindow = null;
-  });
-}
-
-ipcMain.on("password-submitted", (event, password) => {
-  if (passwordWindow) {
-    passwordWindow.close();
-    passwordWindow = null;
-  }
-  if (resolvePasswordPromise) {
-    resolvePasswordPromise(password);
-  }
-});
-
-ipcMain.handle("ask-password", async (event) => {
-  createPasswordWindow();
-  return new Promise((resolve) => {
-    resolvePasswordPromise = resolve;
-  });
 });
 
 ipcMain.on("minimize-window", (event) => {

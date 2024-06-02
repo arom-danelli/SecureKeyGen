@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     const changeSaveLocationButton = document.getElementById("changeSaveLocationButton");
-    const changeColorButton = document.getElementById("changeColorButton");
   
     changeSaveLocationButton.addEventListener("click", async () => {
       const selectedDirectory = await window.electronAPI.selectDirectory();
