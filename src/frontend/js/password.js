@@ -10,11 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
       titleElement.textContent = "Adicionar Senha Nova";
       promptElement.textContent = "Nessa etapa, você pode adicionar uma senha para deixar seu arquivo mais seguro.";
       additionalInfoElement.textContent = "Se preferir, pode deixar sem senha.";
-      additionalInfoElement.style.display = "block"; // Exibe o texto adicional
+      additionalInfoElement.style.display = "block"; 
     } else if (conversionType === "PFXtoCRTandKEY") {
       titleElement.textContent = "Insira a Senha";
       promptElement.textContent = "Por favor, insira a senha do certificado PFX";
-      additionalInfoElement.style.display = "none"; // Oculta o texto adicional
+      additionalInfoElement.style.display = "none"; 
     }
   });
 

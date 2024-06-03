@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 body {
-  background-image: url('../../assets/fundo.jpg'); /* Atualize o caminho conforme necessário */
+  background-image: url('../../assets/fundo.jpg'); 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   font-family: 'Roboto', sans-serif;
   margin: 0;
-  overflow: hidden; /* Remove as barras de rolagem */
+  overflow: hidden; 
 }
 
 .app-container {
@@ -27,13 +27,13 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  -webkit-app-region: drag; /* Permitir arrastar a janela */
+  -webkit-app-region: drag; 
 }
 
 .window-controls {
   display: flex;
   gap: 10px;
-  -webkit-app-region: no-drag; /* Botões não são arrastáveis */
+  -webkit-app-region: no-drag; 
 }
 
 .window-controls button {

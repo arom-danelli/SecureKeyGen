@@ -49,6 +49,10 @@ async function createWindow() {
     return result.filePaths[0];
   });
 
+  ipcMain.handle("get-save-directory", async (event) => {
+    return store.get('saveDirectory') || null;
+  });
+
   ipcMain.handle("convert-cert", async (event, { type, data }) => {
     try {
       const saveDirectory = store.get('saveDirectory') || app.getPath('documents');

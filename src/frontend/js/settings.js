@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedDirectory = await window.electronAPI.selectDirectory();
       if (selectedDirectory) {
         console.log("Diretório selecionado:", selectedDirectory);
-        // Salve o caminho do diretório em uma variável global ou localStorage
         localStorage.setItem('saveDirectory', selectedDirectory);
       }
     });

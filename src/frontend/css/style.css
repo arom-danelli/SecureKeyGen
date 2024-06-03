@@ -10,11 +10,11 @@
 }
 
 body {
-  background-image: url('../../assets/fundo.jpg'); /* Atualize o nome e a extensão da imagem conforme necessário */
-  background-size: cover; /* Faz com que a imagem cubra toda a área */
-  background-position: center; /* Centraliza a imagem */
-  background-repeat: no-repeat; /* Evita que a imagem se repita */
-  background-attachment: fixed; /* Faz com que a imagem fique fixa no lugar enquanto você rola */
+  background-image: url('../../assets/fundo.jpg'); 
+  background-size: cover;
+  background-position: center; 
+  background-repeat: no-repeat; 
+  background-attachment: fixed; 
 }
 
 header {
@@ -22,13 +22,13 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  -webkit-app-region: drag; /* Permitir arrastar a janela */
+  -webkit-app-region: drag;
 }
 
 .window-controls {
   display: flex;
   gap: 10px;
-  -webkit-app-region: no-drag; /* Botões não são arrastáveis */
+  -webkit-app-region: no-drag; 
 }
 
 .window-controls button {
@@ -227,7 +227,7 @@ header {
 }
 
 .file-list-item .progress-text.error {
-  color: #f44336; /* Cor vermelha */
+  color: #f44336; 
 }
 
 .file-list-item .remove-button {
@@ -259,11 +259,11 @@ button.btn-secondary:hover {
 }
 
 #conversion-type-text {
-  font-size: 1.5em; /* Aumente o tamanho da fonte */
-  font-weight: bold; /* Deixe o texto mais grosso */
-  color: #4a148c; /* Altere a cor do texto */
-  margin-bottom: 10px; /* Adicione espaço abaixo do texto */
-  text-align: center; /* Centralize o texto */
+  font-size: 1.5em;
+  font-weight: bold; 
+  color: #4a148c;
+  margin-bottom: 10px; 
+  text-align: center;
 }
 
 #convertButton {
@@ -281,7 +281,7 @@ button.btn-secondary:hover {
   margin-bottom: 20px;
   display: none;
   position: relative;
-  height: 150px; /* Define a altura padrão */
+  height: 150px; 
   border: 1px solid #ddd;
   background-color: #f9f9f9;
 }
