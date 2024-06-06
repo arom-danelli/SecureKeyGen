@@ -53,26 +53,32 @@ async function createWindow() {
     return store.get('saveDirectory') || null;
   });
 
-  ipcMain.handle("convert-cert", async (event, { type, data }) => {
+ipcMain.handle("convert-cert", async (event, { type, data }) => {
     try {
-      const saveDirectory = store.get('saveDirectory') || app.getPath('documents');
-  
-      if (type === "PFXtoCRTandKEY") {
-        if (!isValidPFX(data.filePath, data.password)) {
-          throw new Error("Certificado Inválido");
+        const saveDirectory = store.get('saveDirectory') || app.getPath('documents');
+
+        if (type === "PFXtoCRTandKEY") {
+            if (!isValidPFX(data.filePath, data.password)) {
+                throw new Error("Senha Inválida");
+            }
+            return await convertPFXtoCRTandKEY(data.filePath, data.password, saveDirectory);
+        } else if (type === "CRTandKEYtoPFX") {
+            if (!isValidCRT(data.crtPath) || !isValidKEY(data.keyPath)) {
+                throw new Error("Certificado Inválido");
+            }
+            return await convertCRTandKEYtoPFX(data.crtPath, data.keyPath, data.password, saveDirectory);
         }
-        return await convertPFXtoCRTandKEY(data.filePath, data.password, saveDirectory);
-      } else if (type === "CRTandKEYtoPFX") {
-        if (!isValidCRT(data.crtPath) || !isValidKEY(data.keyPath)) {
-          throw new Error("Certificado Inválido");
-        }
-        return await convertCRTandKEYtoPFX(data.crtPath, data.keyPath, data.password, saveDirectory);
-      }
     } catch (error) {
-      console.error("Erro na conversão:", error);
-      throw new Error("Certificado Inválido");
+        console.error("Erro na conversão:", error);
+        if (error.message.includes("Invalid password")) {
+            throw new Error("Senha Inválida");
+        } else {
+            throw new Error(error.message);
+        }
     }
-  });
+});
+
+
 
   ipcMain.handle("check-file-validity", async (event, { filePath, conversionType, password }) => {
     try {
