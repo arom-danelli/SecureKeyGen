@@ -3,10 +3,10 @@ name: Build Electron App for Linux
 on:
   push:
     branches:
-      - main
+      - final
   pull_request:
     branches:
-      - main
+      - final
 
 jobs:
   build:
