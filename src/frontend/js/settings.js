@@ -9,11 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
     
-  
-    document.getElementById('minimize-button').addEventListener('click', () => {
-      window.electronAPI.minimizeWindow();
-    });
-  
+
     document.getElementById('close-button').addEventListener('click', () => {
       window.electronAPI.closeWindow();
     });

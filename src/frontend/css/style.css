@@ -80,6 +80,10 @@ header {
   margin-top: 40px;
 }
 
+.settings-icon{
+  cursor: pointer;
+}
+
 .conversion-type-tabs button.active {
   background-color: #5C2C72 !important;
   color: #ffffff;
@@ -152,6 +156,7 @@ header {
 
 .file-list-container.show {
   display: block;
+  border: transparent;
 }
 
 .file-list {
@@ -159,6 +164,8 @@ header {
   border: 1px solid #dddddd;
   border-radius: 10px;
   padding: 10px;
+  margin-left: 10px;
+  border: transparent;
 }
 
 .file-list-item {
@@ -340,27 +347,30 @@ button.btn-secondary:hover {
 .file-list-container.show {
   display: block;
 }
-
 .separator {
-  margin-top: 20px;
-  border: none;
-  border-top: 1px solid #ddd;
+  margin: 20px 0;
+  border: 0;
+  height: 1px;
+  background: #ddd;
 }
 
 .footer {
-  text-align: center;
-  margin-top: 10px;
-  font-size: 1em;
-  color: #4a148c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.footer span {
+  margin: 0 10px;
+  font-size: 14px;
+  color: #333;
 }
 
 .company-logo {
-  width: 130px;
-  height: auto;
-  margin-left: 10px;
-  vertical-align: middle;
+  height: 35px;
+  margin: 0 5px;
 }
-
 
 
 

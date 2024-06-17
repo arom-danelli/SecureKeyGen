@@ -4,6 +4,7 @@ const { convertPFXtoCRTandKEY } = require("./src/backend/converterToCrt");
 const { convertCRTandKEYtoPFX } = require("./src/backend/converterToPfx");
 const { isValidPFX, isValidCRT, isValidKEY } = require("./src/backend/validator");
 
+
 let win;
 let settingsWindow;
 let passwordWindow;
@@ -138,7 +139,7 @@ function createSettingsWindow() {
 function createPasswordWindow(conversionType) {
   passwordWindow = new BrowserWindow({
     width: 400,
-    height: 300,
+    height: 350,
     resizable: false,
     modal: true,
     parent: win,
