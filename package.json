@@ -13,6 +13,7 @@
   },
   "keywords": [],
   "author": "Arom Danelli de Freitas",
+  "email": "aromdanelli@hotmail.com",
   "license": "ISC",
   "devDependencies": {
     "electron": "^29.1.6",
