@@ -38,6 +38,7 @@
     "directories": {
       "output": "dist"
     },
+    "publish": "never",
     "win": {
       "target": "nsis",
       "icon": "src/assets/icons/icon.ico"
